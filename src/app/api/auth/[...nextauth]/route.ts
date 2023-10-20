@@ -5,14 +5,13 @@ const handler = NextAuth({
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        username: { label: "Username", type: "text", placeholder: "jsmith" },
+        userName: { label: "Username", type: "text", placeholder: "jsmith" },
       },
       async authorize(credentials, req) {
-
         const user = {
-            id: "",
-            userName: credentials?.userName,
-        }
+          id: "",
+          userName: credentials?.userName,
+        };
 
         if (user) {
           return user;
