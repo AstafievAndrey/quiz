@@ -1,5 +1,5 @@
 "use client";
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
 import AdbIcon from "@mui/icons-material/Adb";
@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 
 import { StyledLogoText } from "./styled";
+import { quizStore } from "@/store";
 
 const DISPLAY = { xs: "none", md: "flex" };
 export const AppBar: FC = () => {
@@ -28,13 +29,28 @@ export const AppBar: FC = () => {
     push("/login");
   };
 
+  const handleLink = () => {
+    push("/");
+  };
+
+  useEffect(() => {
+    if (data?.user) {
+      quizStore.init(data.user);
+    }
+  }, [data]);
+
   return (
     <>
       <MuiAppBar>
         <Container>
           <Toolbar disableGutters>
-            <AdbIcon sx={{ display: DISPLAY, mr: 1 }} />
-            <StyledLogoText variant="h6" noWrap sx={{ display: DISPLAY }}>
+            <AdbIcon onClick={handleLink} sx={{ display: DISPLAY, mr: 1 }} />
+            <StyledLogoText
+              onClick={handleLink}
+              variant="h6"
+              noWrap
+              sx={{ display: DISPLAY }}
+            >
               LOGO
             </StyledLogoText>
             <Typography flexGrow={1} align="right" sx={{ mr: 1 }}>

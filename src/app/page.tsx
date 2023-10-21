@@ -1,9 +1,13 @@
-"use client";
 import { FC } from "react";
-import { Container } from "@mui/material";
+import { Metadata } from "next";
+import { HomeContainer } from "@/containers";
 
-const Home: FC = () => {
-  return <Container></Container>;
+export const metadata: Metadata = {
+  title: "Главная",
+};
+
+const Home: FC = async () => {
+  return <HomeContainer />;
 };
 
 export default Home;

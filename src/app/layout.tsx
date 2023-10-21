@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Providers from "@/components/Providers";
-import "./globals.css";
 import { AppBar } from "@/components";
-import { Box, Container, Toolbar } from "@mui/material";
+
+import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Тестовое задание",
