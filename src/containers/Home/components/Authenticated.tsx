@@ -1,20 +1,20 @@
 import { FC } from "react";
-import { observer } from "mobx-react-lite";
 import { Button, Container, Paper, Stack, Typography } from "@mui/material";
 import Face5Icon from "@mui/icons-material/Face5";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
-import { quizStore } from "@/store";
+import { useQuizLocalStorage } from "@/hooks/useQuizLocalStorage";
 
-export const Authenticated: FC = observer(() => {
+export const Authenticated: FC = () => {
   const { data } = useSession();
-  const active = quizStore.getActive();
+  const { active } = useQuizLocalStorage(data?.user.userName ?? null);
   const { push } = useRouter();
 
   const handlePush = () => {
     push("/quiz");
   };
+
   return (
     <Container>
       <Paper sx={{ m: 2, p: 3 }}>
@@ -24,7 +24,7 @@ export const Authenticated: FC = observer(() => {
             <Typography>{data?.user?.userName}</Typography>
           </Stack>
           {active ? (
-            <Stack spacing={2}>
+            <Stack spacing={2} direction={"row"}>
               <Button onClick={handlePush} variant="contained">
                 Продолжить
               </Button>
@@ -41,4 +41,4 @@ export const Authenticated: FC = observer(() => {
       </Paper>
     </Container>
   );
-});
+};

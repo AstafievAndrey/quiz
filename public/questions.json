@@ -1,0 +1,20 @@
+[
+  {
+    "category": "JavaScript",
+    "difficulty": "hard",
+    "question": "Как создать узел для комментариев в JavaScript?",
+    "correct_answer": "createComment()",
+    "incorrect_answers": ["Comm()", "comment()", "Ничего из перечисленного"]
+  },
+  {
+    "category": "JavaScript",
+    "difficulty": "easy",
+    "question": "Как отправить синтетический объект события??",
+    "correct_answer": "dispatchEvent()",
+    "incorrect_answers": [
+      "dispatch()",
+      "dispatch(Event)",
+      "Ничего из перечисленного"
+    ]
+  }
+]

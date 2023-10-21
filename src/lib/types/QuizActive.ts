@@ -1,4 +1,5 @@
+import { QuizResult } from "./QuizResult";
+
 export type QuizActive = {
   currentQuestion: number;
-  errorCount: number;
-};
+} & Omit<QuizResult, "date">;

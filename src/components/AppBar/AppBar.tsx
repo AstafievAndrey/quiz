@@ -14,7 +14,6 @@ import {
 } from "@mui/material";
 
 import { StyledLogoText } from "./styled";
-import { quizStore } from "@/store";
 
 const DISPLAY = { xs: "none", md: "flex" };
 export const AppBar: FC = () => {
@@ -33,24 +32,13 @@ export const AppBar: FC = () => {
     push("/");
   };
 
-  useEffect(() => {
-    if (data?.user) {
-      quizStore.init(data.user);
-    }
-  }, [data]);
-
   return (
     <>
       <MuiAppBar>
         <Container>
           <Toolbar disableGutters>
-            <AdbIcon onClick={handleLink} sx={{ display: DISPLAY, mr: 1 }} />
-            <StyledLogoText
-              onClick={handleLink}
-              variant="h6"
-              noWrap
-              sx={{ display: DISPLAY }}
-            >
+            <AdbIcon onClick={handleLink} sx={{ mr: 1, cursor: "pointer" }} />
+            <StyledLogoText onClick={handleLink} variant="h6" noWrap>
               LOGO
             </StyledLogoText>
             <Typography flexGrow={1} align="right" sx={{ mr: 1 }}>
