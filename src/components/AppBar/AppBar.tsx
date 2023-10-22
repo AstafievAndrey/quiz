@@ -50,11 +50,11 @@ export const AppBar: FC = () => {
                 <LogoutIcon />
               </IconButton>
             )}
-            {status === "unauthenticated" && (
+            {/* {status === "unauthenticated" && (
               <Button onClick={login} color="inherit">
                 Войти
               </Button>
-            )}
+            )} */}
           </Toolbar>
         </Container>
       </MuiAppBar>
