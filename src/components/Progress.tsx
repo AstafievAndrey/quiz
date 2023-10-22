@@ -8,7 +8,12 @@ export interface ProgressProps {
 export const Progress: FC<ProgressProps> = ({ answerCount, count }) => {
   const value = (100 / count) * answerCount;
 
-  const getColor = (): "primary" | "error" | "warning" | "inherit" => {
+  const getColor = ():
+    | "primary"
+    | "error"
+    | "warning"
+    | "inherit"
+    | "success" => {
     if (value === 0) {
       return "inherit";
     }
@@ -17,6 +22,9 @@ export const Progress: FC<ProgressProps> = ({ answerCount, count }) => {
     }
     if (value < 80) {
       return "warning";
+    }
+    if (value === 100) {
+      return "success";
     }
 
     return "primary";
