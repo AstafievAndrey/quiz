@@ -1,6 +1,6 @@
 "use client";
 import { FC, useState } from "react";
-import { Container, Paper, Grid, Button } from "@mui/material";
+import { Container, Paper, Grid, Button, Fade } from "@mui/material";
 import { Question } from "@/lib/types/Question";
 import { useSession } from "next-auth/react";
 import { useQuizLocalStorage } from "@/hooks/useQuizLocalStorage";
@@ -63,50 +63,54 @@ export const QuizContainer: FC<Props> = ({ questions }) => {
   };
 
   return (
-    <Container maxWidth="md">
-      <Paper sx={{ m: 2, mt: 6, p: 2 }}>
-        {active && (
-          <>
-            <QuestionContainer
-              question={questions[active.currentQuestion]}
-              questionCount={questions.length}
-              currentQuestion={active.currentQuestion}
-              currentAnswer={currentAnswer}
-              handleAnswer={handleAnswer}
-            />
-            <Grid container spacing={4} sx={{ mt: 4 }}>
-              <AlertQuiz
+    <Fade in>
+      <Container maxWidth="md">
+        <Paper sx={{ m: 2, mt: 6, p: 2 }}>
+          {active && (
+            <>
+              <QuestionContainer
+                question={questions[active.currentQuestion]}
+                questionCount={questions.length}
+                currentQuestion={active.currentQuestion}
                 currentAnswer={currentAnswer}
-                correctAnswer={questions[active.currentQuestion].correct_answer}
+                handleAnswer={handleAnswer}
               />
-              <Grid item xs={12} display={"flex"} justifyContent={"center"}>
-                {active.currentQuestion < questions.length - 1 ? (
-                  <Button
-                    variant="contained"
-                    disabled={!currentAnswer}
-                    onClick={handleNextQuestion}
-                  >
-                    Следующий вопрос
-                  </Button>
-                ) : (
-                  <Button
-                    variant="contained"
-                    disabled={!currentAnswer}
-                    onClick={handleEndQuiz}
-                  >
-                    Завершить тест
-                  </Button>
-                )}
+              <Grid container spacing={4} sx={{ mt: 4 }}>
+                <AlertQuiz
+                  currentAnswer={currentAnswer}
+                  correctAnswer={
+                    questions[active.currentQuestion].correct_answer
+                  }
+                />
+                <Grid item xs={12} display={"flex"} justifyContent={"center"}>
+                  {active.currentQuestion < questions.length - 1 ? (
+                    <Button
+                      variant="contained"
+                      disabled={!currentAnswer}
+                      onClick={handleNextQuestion}
+                    >
+                      Следующий вопрос
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="contained"
+                      disabled={!currentAnswer}
+                      onClick={handleEndQuiz}
+                    >
+                      Завершить тест
+                    </Button>
+                  )}
+                </Grid>
               </Grid>
-            </Grid>
-            <Progress
-              answerCount={active.answerCount}
-              count={questions.length}
-            />
-          </>
-        )}
-        {result && <Result result={result} />}
-      </Paper>
-    </Container>
+              <Progress
+                answerCount={active.answerCount}
+                count={questions.length}
+              />
+            </>
+          )}
+          {result && <Result result={result} />}
+        </Paper>
+      </Container>
+    </Fade>
   );
 };

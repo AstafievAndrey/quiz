@@ -7,6 +7,7 @@ import {
   Button,
   Container,
   Divider,
+  Fade,
   Paper,
   Stack,
   Typography,
@@ -30,48 +31,50 @@ export const Authenticated: FC = () => {
   };
 
   return (
-    <Container>
-      <Paper sx={{ m: 2, p: 3 }}>
-        <Stack spacing={2}>
-          <Stack direction="row" spacing={2} alignItems={"center"}>
-            <Avatar>
-              <Face5Icon />
-            </Avatar>
+    <Fade in>
+      <Container>
+        <Paper sx={{ m: 2, p: 3 }}>
+          <Stack spacing={2}>
+            <Stack direction="row" spacing={2} alignItems={"center"}>
+              <Avatar>
+                <Face5Icon />
+              </Avatar>
 
-            <Typography fontWeight={500}>{data?.user?.userName}</Typography>
-          </Stack>
-          {active ? (
-            <Stack spacing={2} direction={"row"}>
-              <Button onClick={handlePush} variant="contained">
-                Продолжить
-              </Button>
-              <Button variant="contained">Начать заново</Button>
+              <Typography fontWeight={500}>{data?.user?.userName}</Typography>
             </Stack>
-          ) : (
-            <div>
-              <Button onClick={handlePush} variant="contained">
-                Начать тестирование
-              </Button>
-            </div>
-          )}
+            {active ? (
+              <Stack spacing={2} direction={"row"}>
+                <Button onClick={handlePush} variant="contained">
+                  Продолжить
+                </Button>
+                <Button variant="contained">Начать заново</Button>
+              </Stack>
+            ) : (
+              <div>
+                <Button onClick={handlePush} variant="contained">
+                  Начать тестирование
+                </Button>
+              </div>
+            )}
 
-          <Accordion>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-              <Typography fontWeight={"bold"}>
-                История результатов
-                {results.length ? `(${results.length})` : null}
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Table rows={results} />
-            </AccordionDetails>
-          </Accordion>
-        </Stack>
-      </Paper>
-    </Container>
+            <Accordion>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+              >
+                <Typography fontWeight={"bold"}>
+                  История результатов
+                  {results.length ? `(${results.length})` : null}
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Table rows={results} />
+              </AccordionDetails>
+            </Accordion>
+          </Stack>
+        </Paper>
+      </Container>
+    </Fade>
   );
 };

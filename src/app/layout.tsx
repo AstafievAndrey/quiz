@@ -3,6 +3,7 @@ import Providers from "@/components/Providers";
 import { AppBar } from "@/components";
 
 import "./globals.css";
+import { LoadingContainer } from "@/containers";
 
 export const metadata: Metadata = {
   title: "Тестовое задание",
@@ -26,7 +27,7 @@ export default function RootLayout({
       <body>
         <Providers>
           <AppBar />
-          {children}
+          <LoadingContainer>{children}</LoadingContainer>
         </Providers>
       </body>
     </html>
