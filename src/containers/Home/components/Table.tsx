@@ -1,4 +1,4 @@
-import { Progress } from "@/components";
+import { Progress, ProgressPercent } from "@/components";
 import { QuizResult } from "@/lib/types/QuizResult";
 import { Box, Stack, Typography } from "@mui/material";
 import {
@@ -38,24 +38,10 @@ export const Table: FC<Props> = ({ rows }) => {
       flex: 1,
       renderCell: (params: GridRenderCellParams) => {
         return (
-          <Box sx={{ display: "block", width: "100%" }}>
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              <Box sx={{ width: "100%", mr: 1 }}>
-                <Progress
-                  count={params.row.questionCount}
-                  answerCount={params.row.answerCount}
-                />
-              </Box>
-              <Box sx={{ minWidth: 35 }}>
-                <Typography
-                  variant="body2"
-                  color="text.secondary"
-                >{`${Math.round(
-                  (100 / params.row.questionCount) * params.row.answerCount
-                )}%`}</Typography>
-              </Box>
-            </Box>
-          </Box>
+          <ProgressPercent
+            count={params.row.questionCount}
+            answerCount={params.row.answerCount}
+          />
         );
       },
     },

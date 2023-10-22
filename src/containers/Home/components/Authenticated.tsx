@@ -33,12 +33,12 @@ export const Authenticated: FC = () => {
     <Container>
       <Paper sx={{ m: 2, p: 3 }}>
         <Stack spacing={2}>
-          <Stack direction="row" spacing={2}>
+          <Stack direction="row" spacing={2} alignItems={"center"}>
             <Avatar>
               <Face5Icon />
             </Avatar>
 
-            <Typography>{data?.user?.userName}</Typography>
+            <Typography fontWeight={500}>{data?.user?.userName}</Typography>
           </Stack>
           {active ? (
             <Stack spacing={2} direction={"row"}>
@@ -61,7 +61,10 @@ export const Authenticated: FC = () => {
               aria-controls="panel1a-content"
               id="panel1a-header"
             >
-              <Typography fontWeight={"bold"}>История результатов</Typography>
+              <Typography fontWeight={"bold"}>
+                История результатов
+                {results.length ? `(${results.length})` : null}
+              </Typography>
             </AccordionSummary>
             <AccordionDetails>
               <Table rows={results} />

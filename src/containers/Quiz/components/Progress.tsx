@@ -4,8 +4,10 @@ import { Progress as LinearProgress, ProgressProps } from "@/components";
 
 export const Progress: FC<ProgressProps> = (props) => {
   return (
-    <Grid item xs={12}>
-      <LinearProgress {...props} />
+    <Grid container sx={{ mt: 2 }}>
+      <Grid item xs={12}>
+        <LinearProgress {...props} />
+      </Grid>
     </Grid>
   );
 };
