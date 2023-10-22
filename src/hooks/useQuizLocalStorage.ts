@@ -26,6 +26,7 @@ export const useQuizLocalStorage = (
           setActive(localInfo?.active ?? (init ? INIT : null));
           setResults(localInfo?.results ?? []);
         } else {
+          setActive(init ? INIT : null);
           setLocalStorage({
             active: init ? INIT : null,
             results,

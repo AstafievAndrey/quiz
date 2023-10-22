@@ -23,10 +23,17 @@ import { Table } from "./Table";
 
 export const Authenticated: FC = () => {
   const { data } = useSession();
-  const { active, results } = useQuizLocalStorage(data?.user.userName ?? null);
+  const { active, results, handleActive } = useQuizLocalStorage(
+    data?.user.userName ?? null
+  );
   const { push } = useRouter();
 
   const handlePush = () => {
+    push(RouteEndpointEnum.QUIZ);
+  };
+
+  const handleStartAgain = () => {
+    handleActive(null);
     push(RouteEndpointEnum.QUIZ);
   };
 
@@ -47,7 +54,9 @@ export const Authenticated: FC = () => {
                 <Button onClick={handlePush} variant="contained">
                   Продолжить
                 </Button>
-                <Button variant="contained">Начать заново</Button>
+                <Button variant="contained" onClick={handleStartAgain}>
+                  Начать заново
+                </Button>
               </Stack>
             ) : (
               <div>
