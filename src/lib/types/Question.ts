@@ -1,6 +1,8 @@
+import { QuestionDifficultyEnum } from "../enums/QuestionDifficultyEnum";
+
 export type Question = {
   category: string;
-  difficulty: "hard" | "medium" | "easy";
+  difficulty: QuestionDifficultyEnum;
   question: string;
   correct_answer: string;
   incorrect_answers: string[];

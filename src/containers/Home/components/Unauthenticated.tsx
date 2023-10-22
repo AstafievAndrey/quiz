@@ -1,3 +1,4 @@
+import { RouteEndpointEnum } from "@/lib/enums/RouteEndpointEnum";
 import { Container, Paper, Typography } from "@mui/material";
 import Link from "next/link";
 import { FC } from "react";
@@ -11,7 +12,7 @@ export const Unauthenticated: FC = () => {
         </Typography>
         <Typography>
           Чтобы пройти тест необходимо{" "}
-          <Link href="/login">войти в систему</Link>
+          <Link href={RouteEndpointEnum.LOGIN}>войти в систему</Link>
         </Typography>
         <Typography>Темы тестирования:</Typography>
         <ul>

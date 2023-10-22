@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 
 import { StyledLogoText } from "./styled";
+import { RouteEndpointEnum } from "@/lib/enums/RouteEndpointEnum";
 
 const DISPLAY = { xs: "none", md: "flex" };
 export const AppBar: FC = () => {
@@ -25,11 +26,11 @@ export const AppBar: FC = () => {
   };
 
   const login = () => {
-    push("/login");
+    push(RouteEndpointEnum.LOGIN);
   };
 
   const handleLink = () => {
-    push("/");
+    push(RouteEndpointEnum.MAIN);
   };
 
   return (

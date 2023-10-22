@@ -9,22 +9,15 @@ import {
   Rating,
   Divider,
   Grid,
-  Slider,
   Button,
-  Alert,
 } from "@mui/material";
 import { Question } from "@/lib/types/Question";
 import { useSession } from "next-auth/react";
 import { useQuizLocalStorage } from "@/hooks/useQuizLocalStorage";
-import { AlertQuiz } from "./components";
+import { AlertQuiz, Progress } from "./components";
 import { useRouter } from "next/navigation";
-
-const INIT = {
-  currentQuestion: 0,
-  errorCount: 0,
-  questionCount: 0,
-  answerCount: 0,
-};
+import { RouteEndpointEnum } from "@/lib/enums/RouteEndpointEnum";
+import { QuestionDifficultyEnum } from "@/lib/enums/QuestionDifficultyEnum";
 
 interface Props {
   questions: Question[];
@@ -34,15 +27,16 @@ export const QuizContainer: FC<Props> = ({ questions }) => {
   const { push } = useRouter();
   const [currentAnswer, setCurrentAnswer] = useState<string | null>(null);
   const [variantAnswer, setVariantAnswer] = useState<string[]>([]);
-  const { active, handleActive, loading } = useQuizLocalStorage(
-    data?.user?.userName ?? null
+  const { active, handleActive, handleAddResult } = useQuizLocalStorage(
+    data?.user?.userName ?? null,
+    true
   );
 
   const checkDifficulty = (difficulty: Question["difficulty"]): number => {
     switch (difficulty) {
-      case "hard":
+      case QuestionDifficultyEnum.HARD:
         return 5;
-      case "medium":
+      case QuestionDifficultyEnum.MEDIUM:
         return 3;
       default:
         return 1;
@@ -56,14 +50,27 @@ export const QuizContainer: FC<Props> = ({ questions }) => {
   };
 
   const handleEndQuiz = () => {
-    handleActive(null);
-    push("/");
+    handleAddResult(active!);
+    push(RouteEndpointEnum.MAIN);
   };
 
   const handleNextQuestion = () => {
     setCurrentAnswer(null);
+    let errorCount = active!.errorCount;
+    let answerCount = active!.answerCount;
+    if (currentAnswer === questions[active!.currentQuestion].correct_answer) {
+      answerCount += 1;
+    } else {
+      errorCount += 1;
+    }
     active &&
-      handleActive({ ...active, currentQuestion: active!.currentQuestion + 1 });
+      handleActive({
+        ...active,
+        answerCount,
+        errorCount,
+        questionCount: questions.length,
+        currentQuestion: active!.currentQuestion + 1,
+      });
   };
 
   const getColor = (answer: string): "inherit" | "success" | "error" => {
@@ -80,13 +87,6 @@ export const QuizContainer: FC<Props> = ({ questions }) => {
     }
     return "inherit";
   };
-
-  useEffect(() => {
-    console.log({ active, loading });
-    if (!active && !loading) {
-      handleActive(INIT);
-    }
-  }, [active, loading]);
 
   useEffect(() => {
     if (Number.isInteger(active?.currentQuestion)) {
@@ -162,9 +162,7 @@ export const QuizContainer: FC<Props> = ({ questions }) => {
               </Button>
             )}
           </Grid>
-          <Grid item xs={12}>
-            <Slider max={100} marks step={5} disabled />
-          </Grid>
+          <Progress answerCount={active.answerCount} count={questions.length} />
         </Grid>
       </Paper>
     </Container>
