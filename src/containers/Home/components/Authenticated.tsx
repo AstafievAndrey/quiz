@@ -24,7 +24,7 @@ import { Table } from "./Table";
 export const Authenticated: FC = () => {
   const { data } = useSession();
   const { active, results, handleActive } = useQuizLocalStorage(
-    data?.user.userName ?? null
+    data?.user?.name ?? null
   );
   const { push } = useRouter();
 
@@ -47,7 +47,7 @@ export const Authenticated: FC = () => {
                 <Face5Icon />
               </Avatar>
 
-              <Typography fontWeight={500}>{data?.user?.userName}</Typography>
+              <Typography fontWeight={500}>{data?.user?.name}</Typography>
             </Stack>
             {active ? (
               <Stack spacing={2} direction={"row"}>

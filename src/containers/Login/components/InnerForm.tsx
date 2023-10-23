@@ -7,7 +7,7 @@ import { useSearchParams } from "next/navigation";
 interface Props {}
 export const InnerForm: FC<Props> = () => {
   const param = useSearchParams();
-  const [userName, setUserName] = useState<string>("");
+  const [name, setUserName] = useState<string>("");
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setUserName(e.target.value);
@@ -16,7 +16,7 @@ export const InnerForm: FC<Props> = () => {
   const handleSubmit = () => {
     const callbackUrl = param.get("callbackUrl") ?? "/";
     signIn("credentials", {
-      userName,
+      name,
       callbackUrl,
     });
   };
@@ -31,9 +31,9 @@ export const InnerForm: FC<Props> = () => {
         fullWidth
         placeholder="Введите имя"
         onChange={handleChange}
-        value={userName}
+        value={name}
       />
-      <Button onClick={handleSubmit} disabled={!userName}>
+      <Button onClick={handleSubmit} disabled={!name}>
         Войти
       </Button>
     </Stack>

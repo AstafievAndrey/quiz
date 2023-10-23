@@ -43,7 +43,7 @@ export const AppBar: FC = () => {
               LOGO
             </StyledLogoText>
             <Typography flexGrow={1} align="right" sx={{ mr: 1 }}>
-              {data?.user?.userName}
+              {data?.user?.name}
             </Typography>
             {status === "authenticated" && (
               <IconButton color="inherit" onClick={logout}>

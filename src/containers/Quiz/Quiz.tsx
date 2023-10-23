@@ -21,7 +21,7 @@ export const QuizContainer: FC<Props> = ({ questions }) => {
   const [currentAnswer, setCurrentAnswer] = useState<string | null>(null);
   const [result, setResult] = useState<Omit<QuizResult, "date"> | null>(null);
   const { active, handleActive, handleAddResult } = useQuizLocalStorage(
-    data?.user?.userName ?? null,
+    data?.user?.name ?? null,
     true
   );
 
