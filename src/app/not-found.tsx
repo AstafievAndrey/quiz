@@ -3,7 +3,6 @@ import { Metadata } from "next";
 import { Box, Button, Container, Grid, Typography } from "@mui/material";
 import ScreenSearchDesktopIcon from "@mui/icons-material/ScreenSearchDesktop";
 import Link from "next/link";
-import { RouteEndpointEnum } from "@/lib/enums/RouteEndpointEnum";
 
 export const metadata: Metadata = {
   title: "Страница не найдена",
@@ -36,9 +35,6 @@ const NotFound: FC = () => {
             <Typography variant="h6">
               Страница которую вы пытаетесь посмотреть не существует
             </Typography>
-            <Link href={RouteEndpointEnum.MAIN}>
-              <Button variant="contained">На главную</Button>
-            </Link>
           </Grid>
         </Grid>
       </Container>
