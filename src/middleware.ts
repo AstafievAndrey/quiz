@@ -2,7 +2,7 @@ export { default } from "next-auth/middleware";
 // import withAuth from "next-auth/middleware";
 // import { authOptions } from "./app/api/auth/[...nextauth]/authOptions";
 export const config = {
-  matcher: ["/quiz"],
+  matcher: ["/quiz", "/api/quiz"],
 };
 
 // export default withAuth({

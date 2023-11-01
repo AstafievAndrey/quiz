@@ -11,6 +11,7 @@ import {
   Result,
 } from "./components";
 import { QuizResult } from "@/lib/types/QuizResult";
+import { quizService } from "@/lib/services";
 
 interface Props {
   questions: Question[];
