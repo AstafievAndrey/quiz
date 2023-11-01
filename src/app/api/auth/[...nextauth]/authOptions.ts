@@ -11,7 +11,7 @@ const prisma = new PrismaClient();
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   secret: process.env.NEXTAUTH_SECRET,
-  session: { strategy: "database" },
+  session: { strategy: "jwt" },
 
   providers: [
     GitHubProvider({

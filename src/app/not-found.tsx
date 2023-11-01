@@ -30,7 +30,7 @@ const NotFound: FC = () => {
           >
             <ScreenSearchDesktopIcon sx={{ fontSize: "10.5rem" }} />
           </Grid>
-          <Grid xs={12} sm={8}>
+          <Grid item xs={12} sm={8}>
             <Typography variant="h1">404</Typography>
             <Typography variant="h6">
               Страница которую вы пытаетесь посмотреть не существует
