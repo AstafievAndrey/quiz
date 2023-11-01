@@ -1,16 +1,21 @@
 import type { Metadata } from "next";
+import { getServerSession } from "next-auth";
+import { authOptions } from "./api/auth/[...nextauth]/authOptions";
 
 import "./globals.css";
+import { AppBar } from "@/components";
+import { Providers } from "@/containers";
 
 export const metadata: Metadata = {
   title: "Тестовое задание",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await getServerSession(authOptions);
   return (
     <html lang="ru">
       <head>
@@ -21,7 +26,10 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap"
         />
       </head>
-      <body>{children}</body>
+      <body>
+        <AppBar user={session?.user ?? null} />
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }

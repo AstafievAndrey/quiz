@@ -1,6 +1,7 @@
 import { NextAuthOptions } from "next-auth";
 import GitHubProvider from "next-auth/providers/github";
 // import VkProvider from "next-auth/providers/vk";
+import MailRuProvider from "next-auth/providers/mailru";
 import GoogleProvider from "next-auth/providers/google";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { PrismaClient } from "@prisma/client";
@@ -10,7 +11,7 @@ const prisma = new PrismaClient();
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   secret: process.env.NEXTAUTH_SECRET,
-  session: { strategy: "jwt" },
+  session: { strategy: "database" },
 
   providers: [
     GitHubProvider({
@@ -20,6 +21,10 @@ export const authOptions: NextAuthOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+    }),
+    MailRuProvider({
+      clientId: process.env.MAILRU_CLIENT_ID as string,
+      clientSecret: process.env.MAILRU_CLIENT_SECRET as string,
     }),
     // VkProvider({
     //   clientId: process.env.VK_CLIENT_ID as string,
