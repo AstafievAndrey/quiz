@@ -56,10 +56,12 @@ model VerificationToken {
 model QuizResult {
   id            String   @id @default(cuid())
   userId        String
-  date          DateTime
   questionCount Int
   errorCount    Int
   answerCount   Int
+
+  createdAt     DateTime  @default(now()) @map(name: "created_at")
+  updatedAt     DateTime  @updatedAt @map(name: "updated_at")
 
   user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
