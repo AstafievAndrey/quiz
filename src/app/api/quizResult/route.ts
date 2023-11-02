@@ -5,7 +5,8 @@ import prisma from "../auth/[...nextauth]/prisma";
 
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
-  const { answerCount, errorCount, questionCount } = await req.json();
+  const { answerCount, errorCount, questionCount, currentQuestion } =
+    await req.json();
 
   try {
     if (session?.user) {
@@ -14,10 +15,11 @@ export async function POST(req: Request) {
           userId: session!.user.id,
           answerCount,
           errorCount,
+          currentQuestion,
           questionCount,
         },
       });
-      return NextResponse.json({ quizResult });
+      return NextResponse.json(quizResult);
     }
   } catch (error) {
     return NextResponse.json({ message: "Ошибка", error });

@@ -22,7 +22,26 @@ const find = async (): Promise<QuizResult[]> => {
   return (await res).json();
 };
 
+const findActive = async (): Promise<QuizResult> => {
+  const res = fetch(`${URL}/active`, {
+    method: "GET",
+    headers: HEADERS,
+  });
+  return (await res).json();
+};
+
+const update = async (data: QuizResult): Promise<QuizResult> => {
+  const res = fetch(`${URL}/active`, {
+    method: "PUT",
+    headers: HEADERS,
+    body: JSON.stringify(data),
+  });
+  return (await res).json();
+};
+
 export const quizResultService = {
   create,
+  update,
   find,
+  findActive,
 };

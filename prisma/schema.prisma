@@ -54,14 +54,17 @@ model VerificationToken {
 }
 
 model QuizResult {
-  id            String   @id @default(cuid())
-  userId        String
-  questionCount Int
-  errorCount    Int
-  answerCount   Int
+  id              String    @id @default(cuid())
+  userId          String
+  questionCount   Int
+  errorCount      Int
+  answerCount     Int
+  currentQuestion Int
 
-  createdAt     DateTime  @default(now()) @map(name: "created_at")
-  updatedAt     DateTime  @updatedAt @map(name: "updated_at")
+  isActive        Boolean   @default(false)
 
-  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt       DateTime  @default(now()) @map(name: "created_at")
+  updatedAt       DateTime  @updatedAt @map(name: "updated_at")
+
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

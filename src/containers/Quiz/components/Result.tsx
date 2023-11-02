@@ -22,6 +22,7 @@ export const Result: FC<Props> = ({ result }) => {
     if (num === 1) return words[0];
     return words[2];
   };
+
   return (
     <>
       <Grid container spacing={2} sx={{ mt: 2 }}>

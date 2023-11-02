@@ -1,5 +1,5 @@
 "use client";
-import { FC, useState } from "react";
+import { FC, useState, useEffect } from "react";
 import { Container, Paper, Grid, Button, Fade } from "@mui/material";
 import { Question } from "@/lib/types/Question";
 import { useSession } from "next-auth/react";
@@ -12,19 +12,29 @@ import {
 } from "./components";
 import { QuizResult } from "@prisma/client";
 import { quizResultService } from "@/lib/services";
+import { useSendRequest } from "@/hooks";
 
 interface Props {
   questions: Question[];
 }
 export const QuizContainer: FC<Props> = ({ questions }) => {
-  const { data } = useSession();
-
   const [currentAnswer, setCurrentAnswer] = useState<string | null>(null);
-  const [result, setResult] = useState<QuizResult | null>(null);
-  const { active, handleActive } = useQuizLocalStorage(
-    data?.user?.name ?? null,
-    true
+  const [active, setActive] = useState<QuizResult | null>(null);
+  const [getActive, { data: quizResultGetActive }] = useSendRequest<QuizResult>(
+    {
+      fn: () => {
+        return quizResultService.findActive();
+      },
+    }
   );
+  const [
+    updActive,
+    { data: quizResultUpdActive, isLoading: isLoadingUpdActive },
+  ] = useSendRequest<QuizResult>({
+    fn: (data: QuizResult) => {
+      return quizResultService.update(data);
+    },
+  });
 
   const handleAnswer = (answer: string) => () => {
     if (!currentAnswer) {
@@ -35,7 +45,9 @@ export const QuizContainer: FC<Props> = ({ questions }) => {
   const calcCount = () => {
     let errorCount = active!.errorCount;
     let answerCount = active!.answerCount;
-    if (currentAnswer === questions[active!.currentQuestion].correct_answer) {
+    if (
+      currentAnswer === questions[active!.currentQuestion - 1].correct_answer
+    ) {
       answerCount += 1;
     } else {
       errorCount += 1;
@@ -47,49 +59,69 @@ export const QuizContainer: FC<Props> = ({ questions }) => {
   };
 
   const handleEndQuiz = async () => {
-    const result = { ...active!, ...calcCount() };
-    const quizResult = await quizResultService.create(
-      result as any as QuizResult
-    );
-    setResult(quizResult);
+    if (active) {
+      updActive({
+        ...active,
+        ...calcCount(),
+        isActive: false,
+        questionCount: questions.length,
+        currentQuestion: questions.length,
+      });
+    }
   };
 
   const handleNextQuestion = () => {
     setCurrentAnswer(null);
-    active &&
-      handleActive({
+    if (active) {
+      updActive({
         ...active,
         ...calcCount(),
         questionCount: questions.length,
-        currentQuestion: active!.currentQuestion + 1,
+        currentQuestion: active.currentQuestion + 1,
       });
+    }
   };
 
+  useEffect(() => {
+    if (quizResultGetActive) {
+      setActive(quizResultGetActive);
+    }
+  }, [quizResultGetActive]);
+
+  useEffect(() => {
+    if (quizResultUpdActive) {
+      setActive(quizResultUpdActive);
+    }
+  }, [quizResultUpdActive]);
+
+  useEffect(() => {
+    getActive();
+  }, []);
+
+  const currentQuestionIndex = (active?.currentQuestion ?? 0) - 1;
   return (
     <Fade in>
       <Container maxWidth="md">
         <Paper sx={{ m: 2, mt: 6, p: 2 }}>
-          {active && !result && (
+          {active && active.isActive && (
             <>
               <QuestionContainer
-                question={questions[active.currentQuestion]}
+                question={questions[currentQuestionIndex]}
                 questionCount={questions.length}
-                currentQuestion={active.currentQuestion}
+                currentQuestion={currentQuestionIndex}
                 currentAnswer={currentAnswer}
                 handleAnswer={handleAnswer}
               />
               <Grid container spacing={4} sx={{ mt: 4 }}>
                 <AlertQuiz
                   currentAnswer={currentAnswer}
-                  correctAnswer={
-                    questions[active.currentQuestion].correct_answer
-                  }
+                  correctAnswer={questions[currentQuestionIndex].correct_answer}
                 />
                 <Grid item xs={12} display={"flex"} justifyContent={"center"}>
-                  {active.currentQuestion < questions.length - 1 ? (
+                  {active.currentQuestion < questions.length ? (
                     <Button
                       variant="contained"
-                      disabled={!currentAnswer}
+                      disabled={!currentAnswer || isLoadingUpdActive}
                       onClick={handleNextQuestion}
                     >
                       Следующий вопрос
@@ -97,7 +129,7 @@ export const QuizContainer: FC<Props> = ({ questions }) => {
                   ) : (
                     <Button
                       variant="contained"
-                      disabled={!currentAnswer}
+                      disabled={!currentAnswer || isLoadingUpdActive}
                       onClick={handleEndQuiz}
                     >
                       Завершить тест
@@ -111,7 +143,7 @@ export const QuizContainer: FC<Props> = ({ questions }) => {
               />
             </>
           )}
-          {result && <Result result={result} />}
+          {active && !active.isActive && <Result result={active} />}
         </Paper>
       </Container>
     </Fade>
