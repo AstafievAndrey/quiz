@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { QuizActive, QuizResult } from "@/lib/types";
+import { QuizResult } from "@prisma/client";
+import { QuizActive } from "@/lib/types";
 
 const INIT = {
   currentQuestion: 0,
@@ -52,23 +53,7 @@ export const useQuizLocalStorage = (
     setLocalStorage({ active, results });
   };
 
-  const handleAddResult = (active: QuizActive) => {
-    setResults((old) => {
-      const results = [
-        ...old,
-        {
-          date: new Date().toISOString(),
-          ...active,
-        },
-      ];
-      setLocalStorage({ active: null, results });
-      return results;
-    });
-    setActive(null);
-  };
-
   return {
-    handleAddResult,
     handleActive,
     results,
     active,

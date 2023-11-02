@@ -1,12 +1,12 @@
 import { Button, Grid, Typography } from "@mui/material";
 import { FC } from "react";
-import { QuizResult } from "@/lib/types/QuizResult";
+import { QuizResult } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { RouteEndpointEnum } from "@/lib/enums/RouteEndpointEnum";
 import { ProgressPercent } from "@/components";
 
 interface Props {
-  result: Omit<QuizResult, "date">;
+  result: QuizResult;
 }
 
 export const Result: FC<Props> = ({ result }) => {

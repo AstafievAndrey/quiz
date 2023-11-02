@@ -10,8 +10,8 @@ import {
   Question as QuestionContainer,
   Result,
 } from "./components";
-import { QuizResult } from "@/lib/types/QuizResult";
-import { quizResultService, quizService } from "@/lib/services";
+import { QuizResult } from "@prisma/client";
+import { quizResultService } from "@/lib/services";
 
 interface Props {
   questions: Question[];
@@ -46,10 +46,12 @@ export const QuizContainer: FC<Props> = ({ questions }) => {
     };
   };
 
-  const handleEndQuiz = () => {
+  const handleEndQuiz = async () => {
     const result = { ...active!, ...calcCount() };
-    quizResultService.create(result);
-    setResult(result!);
+    const quizResult = await quizResultService.create(
+      result as any as QuizResult
+    );
+    setResult(quizResult);
   };
 
   const handleNextQuestion = () => {

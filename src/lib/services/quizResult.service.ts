@@ -5,12 +5,13 @@ const HEADERS = {
   "Content-Type": "application/json;charset=utf-8",
 };
 
-const create = (data: QuizResult) => {
-  return fetch(URL, {
+const create = async (data: QuizResult): Promise<QuizResult> => {
+  const res = fetch(URL, {
     method: "POST",
     headers: HEADERS,
     body: JSON.stringify(data),
   });
+  return (await res).json();
 };
 
 const find = async (): Promise<QuizResult[]> => {
