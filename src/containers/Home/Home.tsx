@@ -1,70 +1,40 @@
 "use client";
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  Avatar,
-  Button,
   Container,
   Fade,
   Paper,
   Stack,
   Typography,
 } from "@mui/material";
-import Face5Icon from "@mui/icons-material/Face5";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 
-import { useQuizLocalStorage } from "@/hooks";
-import { RouteEndpointEnum } from "@/lib/enums";
-import { Table } from "./components";
+import { QuizResult } from "@prisma/client";
+import { quizResultService } from "@/lib/services";
+
+import { Table, UserInfo } from "./components";
 
 export const HomeContainer: FC = () => {
-  const { data } = useSession();
-  const { active, results, handleActive } = useQuizLocalStorage(
-    data?.user?.name ?? null
-  );
-  const { push } = useRouter();
+  const [results, setResults] = useState<QuizResult[]>([]);
 
-  const handlePush = () => {
-    push(RouteEndpointEnum.QUIZ);
+  const handleFetch = async () => {
+    const res = await quizResultService.find();
+    setResults(res);
   };
 
-  const handleStartAgain = () => {
-    handleActive(null);
-    push(RouteEndpointEnum.QUIZ);
-  };
+  useEffect(() => {
+    handleFetch();
+  }, []);
 
   return (
     <Fade in>
       <Container>
         <Paper sx={{ m: 2, p: 3 }}>
           <Stack spacing={2}>
-            <Stack direction="row" spacing={2} alignItems={"center"}>
-              <Avatar src={data?.user?.image ?? undefined}>
-                <Face5Icon />
-              </Avatar>
-
-              <Typography fontWeight={500}>{data?.user?.name}</Typography>
-            </Stack>
-            {active ? (
-              <Stack spacing={2} direction={"row"}>
-                <Button onClick={handlePush} variant="contained">
-                  Продолжить
-                </Button>
-                <Button variant="contained" onClick={handleStartAgain}>
-                  Начать заново
-                </Button>
-              </Stack>
-            ) : (
-              <div>
-                <Button onClick={handlePush} variant="contained">
-                  Начать тестирование
-                </Button>
-              </div>
-            )}
+            <UserInfo />
 
             <Accordion>
               <AccordionSummary

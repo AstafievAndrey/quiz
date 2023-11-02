@@ -1,6 +1,7 @@
 export type QuizResult = {
-  date: string;
   questionCount: number;
   errorCount: number;
   answerCount: number;
+  createdAt?: string;
+  updatedAt?: string;
 };

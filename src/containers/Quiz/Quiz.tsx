@@ -11,7 +11,7 @@ import {
   Result,
 } from "./components";
 import { QuizResult } from "@/lib/types/QuizResult";
-import { quizService } from "@/lib/services";
+import { quizResultService, quizService } from "@/lib/services";
 
 interface Props {
   questions: Question[];
@@ -20,8 +20,8 @@ export const QuizContainer: FC<Props> = ({ questions }) => {
   const { data } = useSession();
 
   const [currentAnswer, setCurrentAnswer] = useState<string | null>(null);
-  const [result, setResult] = useState<Omit<QuizResult, "date"> | null>(null);
-  const { active, handleActive, handleAddResult } = useQuizLocalStorage(
+  const [result, setResult] = useState<QuizResult | null>(null);
+  const { active, handleActive } = useQuizLocalStorage(
     data?.user?.name ?? null,
     true
   );
@@ -48,7 +48,7 @@ export const QuizContainer: FC<Props> = ({ questions }) => {
 
   const handleEndQuiz = () => {
     const result = { ...active!, ...calcCount() };
-    handleAddResult(result);
+    quizResultService.create(result);
     setResult(result!);
   };
 
@@ -67,7 +67,7 @@ export const QuizContainer: FC<Props> = ({ questions }) => {
     <Fade in>
       <Container maxWidth="md">
         <Paper sx={{ m: 2, mt: 6, p: 2 }}>
-          {active && (
+          {active && !result && (
             <>
               <QuestionContainer
                 question={questions[active.currentQuestion]}

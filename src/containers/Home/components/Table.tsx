@@ -7,7 +7,7 @@ import {
 } from "@mui/x-data-grid";
 
 import { ProgressPercent } from "@/components";
-import { QuizResult } from "@/lib/types";
+import { QuizResult } from "@prisma/client";
 
 interface Props {
   rows: QuizResult[];
@@ -20,7 +20,7 @@ export const Table: FC<Props> = ({ rows }) => {
       width: 200,
       sortable: false,
       valueGetter: (params: GridValueGetterParams) =>
-        new Date(params.row.date).toLocaleString(),
+        new Date(params.row.createdAt).toLocaleString(),
     },
     {
       field: "questionCount",
