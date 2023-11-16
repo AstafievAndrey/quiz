@@ -1,5 +1,8 @@
-import { QuestionDifficultyEnum } from "@/lib/enums/QuestionDifficultyEnum";
-import { Question as QuestionTYpe } from "@/lib/types/Question";
+import {
+  Prisma,
+  QuestionDifficultyEnum,
+  Question as QuestionType,
+} from "@prisma/client";
 import {
   Stack,
   Typography,
@@ -12,7 +15,11 @@ import { shuffle } from "lodash";
 import { FC, useEffect, useState } from "react";
 
 interface Props {
-  question: QuestionTYpe;
+  question: Prisma.QuestionGetPayload<{
+    include: {
+      category: true;
+    };
+  }>;
   questionCount: number;
   currentQuestion: number;
   currentAnswer: string | null;
@@ -29,17 +36,17 @@ export const Question: FC<Props> = ({
 
   const getColor = (answer: string): "inherit" | "success" | "error" => {
     if (currentAnswer) {
-      if (answer === question.correct_answer) {
+      if (answer === question.correctAnswer) {
         return "success";
       }
-      if (answer !== question.correct_answer && currentAnswer === answer) {
+      if (answer !== question.correctAnswer && currentAnswer === answer) {
         return "error";
       }
     }
     return "inherit";
   };
 
-  const checkDifficulty = (difficulty: QuestionTYpe["difficulty"]): number => {
+  const checkDifficulty = (difficulty: QuestionType["difficulty"]): number => {
     switch (difficulty) {
       case QuestionDifficultyEnum.HARD:
         return 5;
@@ -53,7 +60,7 @@ export const Question: FC<Props> = ({
   useEffect(() => {
     if (Number.isInteger(currentQuestion)) {
       setVariantAnswer(
-        shuffle([question.correct_answer, ...question.incorrect_answers])
+        shuffle([question.correctAnswer, ...question.incorrectAnswers])
       );
     }
   }, [currentQuestion]);
@@ -61,7 +68,9 @@ export const Question: FC<Props> = ({
   return (
     <>
       <Stack spacing={1}>
-        <Typography variant="body1">Категория: {question.category}</Typography>
+        <Typography variant="body1">
+          Категория: {question.category.name}
+        </Typography>
         <Rating value={checkDifficulty(question.difficulty)} readOnly />
         <Typography variant="h6">
           Вопрос {currentQuestion + 1} из {questionCount}

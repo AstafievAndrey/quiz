@@ -1,21 +1,22 @@
 "use client";
 import { FC, useState, useEffect } from "react";
 import { Container, Paper, Grid, Button, Fade } from "@mui/material";
-import { Question } from "@/lib/types/Question";
-import { useSession } from "next-auth/react";
-import { useQuizLocalStorage } from "@/hooks/useQuizLocalStorage";
 import {
   AlertQuiz,
   Progress,
   Question as QuestionContainer,
   Result,
 } from "./components";
-import { QuizResult } from "@prisma/client";
+import { Prisma, QuizResult } from "@prisma/client";
 import { quizResultService } from "@/lib/services";
 import { useSendRequest } from "@/hooks";
 
 interface Props {
-  questions: Question[];
+  questions: Prisma.QuestionGetPayload<{
+    include: {
+      category: true;
+    };
+  }>[];
 }
 export const QuizContainer: FC<Props> = ({ questions }) => {
   const [currentAnswer, setCurrentAnswer] = useState<string | null>(null);
@@ -46,7 +47,7 @@ export const QuizContainer: FC<Props> = ({ questions }) => {
     let errorCount = active!.errorCount;
     let answerCount = active!.answerCount;
     if (
-      currentAnswer === questions[active!.currentQuestion - 1].correct_answer
+      currentAnswer === questions[active!.currentQuestion - 1].correctAnswer
     ) {
       answerCount += 1;
     } else {
@@ -115,7 +116,7 @@ export const QuizContainer: FC<Props> = ({ questions }) => {
               <Grid container spacing={4} sx={{ mt: 4 }}>
                 <AlertQuiz
                   currentAnswer={currentAnswer}
-                  correctAnswer={questions[currentQuestionIndex].correct_answer}
+                  correctAnswer={questions[currentQuestionIndex].correctAnswer}
                 />
                 <Grid item xs={12} display={"flex"} justifyContent={"center"}>
                   {active.currentQuestion < questions.length ? (
