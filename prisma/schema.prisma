@@ -68,3 +68,32 @@ model QuizResult {
 
   user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
+
+model Category {
+  id              String    @id @default(cuid())
+  name            String
+  questions        Question[]
+
+  createdAt       DateTime  @default(now()) @map(name: "created_at")
+  updatedAt       DateTime  @updatedAt @map(name: "updated_at")
+}
+
+model Question {
+  id                String    @id @default(cuid())
+  categoryId        String
+  question          String
+  correctAnswer    String    @map(name: "correct_answer")
+  difficulty        QuestionDifficultyEnum
+  incorrectAnswers String[]   @map(name: "incorrect_answers")
+
+  createdAt         DateTime  @default(now()) @map(name: "created_at")
+  updatedAt         DateTime  @updatedAt @map(name: "updated_at")
+
+  category          Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+}
+
+enum QuestionDifficultyEnum {
+  HARD
+  MEDIUM
+  EASY
+}
