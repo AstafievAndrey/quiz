@@ -27,6 +27,17 @@ export async function POST(req: Request) {
 }
 
 export async function GET(req: Request, res: Response) {
-  const quizResult = await prisma.quizResult.findMany();
-  return NextResponse.json(quizResult);
+  try {
+    const session = await getServerSession(authOptions);
+    if (session?.user) {
+      const quizResult = await prisma.quizResult.findMany({
+        where: {
+          userId: session.user.id,
+        },
+      });
+      return NextResponse.json(quizResult);
+    }
+  } catch (error) {
+    return NextResponse.json({ message: "Ошибка", error });
+  }
 }
